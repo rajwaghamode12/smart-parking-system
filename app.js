@@ -77,19 +77,16 @@ function getDynamicRateInfo(slotId = null) {
 
 // ─── CANCELLATION POLICY & REFUND LOGIC ───────
 let cancellationPolicy = JSON.parse(localStorage.getItem('sp_cancel_policy') || JSON.stringify({
-  refundPct: 50,          // 50% refund amount of total booking
-  fullRefundHours: 0,     // Cancellation prior to start gets 50% refund
+  refundPct: 50,          // 50% refund of total booking amount
   partialRefundPct: 50,   // 50% refund rate
-  allowAfterStart: false  // No cancellation after start unless admin override
+  allowAfterStart: true   // Allow cancellation at any time with 50% refund
 }));
 
-// Force update stored policy to 50% if previous default exists
-if (!localStorage.getItem('sp_cancel_policy_v2')) {
-  cancellationPolicy.refundPct = 50;
-  cancellationPolicy.partialRefundPct = 50;
-  localStorage.setItem('sp_cancel_policy', JSON.stringify(cancellationPolicy));
-  localStorage.setItem('sp_cancel_policy_v2', 'true');
-}
+// Force 50% refund policy
+cancellationPolicy.refundPct = 50;
+cancellationPolicy.partialRefundPct = 50;
+cancellationPolicy.allowAfterStart = true;
+localStorage.setItem('sp_cancel_policy', JSON.stringify(cancellationPolicy));
 
 function saveCancellationPolicy(policy) {
   cancellationPolicy = policy;
@@ -97,28 +94,15 @@ function saveCancellationPolicy(policy) {
 }
 
 function calculateRefund(booking) {
-  const now = new Date();
-  const startTime = new Date(booking.entryTime || booking.startTime);
-  const diffHours = (startTime.getTime() - now.getTime()) / (1000 * 60 * 60);
-
-  if (diffHours <= 0 && !cancellationPolicy.allowAfterStart) {
-    return {
-      allowed: false,
-      refundPct: 0,
-      refundAmount: 0,
-      reason: 'The parking reservation has already started.'
-    };
-  }
-
-  // 50% refund amount of the total booking amount
-  const ratePct = cancellationPolicy.refundPct !== undefined ? cancellationPolicy.refundPct : (cancellationPolicy.partialRefundPct !== undefined ? cancellationPolicy.partialRefundPct : 50);
-  const refundAmt = Math.round((booking.amount * ratePct) / 100);
+  // Always allow cancellation with a guaranteed 50% refund
+  const refundPct = 50;
+  const refundAmt = Math.round((booking.amount * refundPct) / 100);
 
   return {
     allowed: true,
-    refundPct: ratePct,
+    refundPct: refundPct,
     refundAmount: refundAmt,
-    reason: `50% Refund Policy: 50% of ₹${booking.amount} = ₹${refundAmt} refunded to wallet`
+    reason: `50% Refund Policy: 50% of ₹${booking.amount} = ₹${refundAmt} credited to your SmartPark Wallet`
   };
 }
 
