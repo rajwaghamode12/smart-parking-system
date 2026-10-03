@@ -594,6 +594,58 @@ select option { background: var(--bg-secondary); }
   text-align: center;
 }
 
+/* ─── Floor / Zone Filter Tabs ────────── */
+.floor-tab {
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.floor-tab:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: rgba(99,102,241,0.08);
+}
+.floor-tab.active {
+  border-color: var(--accent);
+  background: rgba(99,102,241,0.18);
+  color: var(--accent-light);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(99,102,241,0.25);
+}
+
+/* ─── Warning Button ─────────────────── */
+.btn-warning {
+  background: linear-gradient(135deg, var(--yellow), #d97706);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 20px var(--yellow-glow);
+}
+.btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--yellow-glow);
+}
+
+/* ─── Ticket / Booking Confirmation ──── */
+.ticket-container {
+  background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(99,102,241,0.06));
+  border: 2px dashed rgba(16,185,129,0.4);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* ─── Gap-4 Utility ──────────────────── */
+.gap-4 { gap: 4px; }
+
 /* ─── Responsive ─────────────────────── */
 @media (max-width: 1024px) {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }

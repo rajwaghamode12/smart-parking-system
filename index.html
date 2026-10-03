@@ -727,7 +727,9 @@
   }
 
   function calcTabPrice() {
-    const slotId = document.getElementById('uSlotSelect').value;
+    const slotEl = document.getElementById('uSlotSelect');
+    if (!slotEl) return;
+    const slotId = slotEl.value;
     const hours = parseInt(document.getElementById('uDurationHours').value) || 1;
     const info = getDynamicRateInfo(slotId);
 
@@ -743,7 +745,7 @@
     document.getElementById('uSumTotal').textContent = `₹${total}`;
 
     const canvas = document.getElementById('uPaymentCanvasQR');
-    if (canvas) {
+    if (canvas && slotId) {
       renderCanvasQR('uPaymentCanvasQR', `upi://pay?pa=smartpark@okicici&pn=SmartPark&am=${total}&cu=INR`);
     }
   }
